@@ -23,10 +23,10 @@ uint32_t c_ble=0,c_blespam=0,c_bleprox=0,c_airtag=0,c_inject=0;
 bool sniff=false, blespam=false;
 uint32_t t_log=0;
 String blebuf=""; uint32_t blen=0;
-String targetMac="";           // для трекера
-uint8_t savedMac[6];           // заводской MAC
+String targetMac="";           
+uint8_t savedMac[6];           
 
-// ================= PAGE =================
+
 static const char PAGE[] PROGMEM = R"HTML(
 <!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -162,11 +162,11 @@ line('c3fw v2 ready. 36 функций.');
 </script></body></html>
 )HTML";
 
-// ================= utils =================
+
 void out(const String& s){ http.send(200,"text/plain",s); }
 bool bleBusy(){ return blespam; }
 
-// ================= wifi =================
+
 void fScan(bool deep){
   int n=WiFi.scanNetworks(false,deep); if(n>MAX_SCAN)n=MAX_SCAN;
   String s="# "+String(n)+"\n";
@@ -453,7 +453,7 @@ void fStats(){
 void fClr(){ c_mgmt=c_data=c_ctrl=c_deauth=c_beacon=c_probe=0;c_blespam=c_bleprox=c_airtag=c_inject=0;blen=0;blebuf="";out("clr"); }
 void fReboot(){ out("reboot"); delay(500); ESP.restart(); }
 
-// ================= raw =================
+
 void fRaw(){
   String q=http.arg("q"); q.trim();
   if(!q.length())return out("");
@@ -483,14 +483,14 @@ void fRaw(){
   out("unknown: "+q);
 }
 
-// ================= setup =================
+
 void setup(){
   Serial.begin(115200);
   WiFi.mode(WIFI_AP);
   WiFi.softAP(AP_SSID,AP_PASS,AP_CH);
   Serial.print("ip "); Serial.println(WiFi.softAPIP());
 
-  // сохраняем заводской MAC
+  
   esp_wifi_get_mac(WIFI_IF_STA,savedMac);
 
   BLEDevice::init("c3fw");
